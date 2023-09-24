@@ -51,7 +51,13 @@ export class AccountingSettings extends Doc {
 
   override hidden: HiddenMap = {
     discountAccount: () => !this.enableDiscounting,
-    gstin: () => this.fyo.singles.SystemSettings?.countryCode !== 'in',
+    gstin: () =>
+      // Show GST/ABN field in General Settings page,
+      // so that user can add GST number for the business.
+      // ABN field defined in au/AccountingSettings.json file.
+      !['in', 'au'].includes(
+        this.fyo.singles.SystemSettings?.countryCode ?? ''
+      ),
   };
 
   async change(ch: ChangeArg) {
